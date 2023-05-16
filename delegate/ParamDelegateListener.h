@@ -5,23 +5,22 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Components/PointLightComponent.h"
-#include "DelegateListener.generated.h"
+#include "ParamDelegateListener.generated.h"
 
 UCLASS()
-class LEARNING_API ADelegateListener : public AActor
+class LEARNING_API AParamDelegateListener : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	ADelegateListener();
+	AParamDelegateListener();
 
 	UFUNCTION()
-		void EnableLight();
-	UFUNCTION()
-		void DisableLight();
+		void SetLightColor(FLinearColor LightColor, bool EnableLight);
 	UPROPERTY()
 		UPointLightComponent* PointLight;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

@@ -37,6 +37,9 @@ void AMyTriggerVloume::NotifyActorBeginOverlap(AActor* OtherActor) {
 		ALearningGameModeBase* MyGameMode = Cast<ALearningGameModeBase>(GameMode);
 		if (MyGameMode != nullptr) {
 			MyGameMode->MyStandardDelegate.ExecuteIfBound();
+			auto Color = FLinearColor(1, 0, 0, 1);
+			MyGameMode->MyParameterDelegate.ExecuteIfBound(Color);
+			MyGameMode->MyMulticastDelegate.Broadcast();
 		}
 	}
 }

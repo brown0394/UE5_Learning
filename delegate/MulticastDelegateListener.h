@@ -5,23 +5,25 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Components/PointLightComponent.h"
-#include "DelegateListener.generated.h"
+#include "MulticastDelegateListener.generated.h"
 
 UCLASS()
-class LEARNING_API ADelegateListener : public AActor
+class LEARNING_API AMulticastDelegateListener : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	ADelegateListener();
+	AMulticastDelegateListener();
 
 	UFUNCTION()
-		void EnableLight();
-	UFUNCTION()
-		void DisableLight();
+		void ToggleLight();
+
+
 	UPROPERTY()
 		UPointLightComponent* PointLight;
+	FDelegateHandle MyDelegateHandle;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

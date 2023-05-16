@@ -1,40 +1,45 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "DelegateListener.h"
+#include "MulticastDelegateListener.h"
 #include "LearningGameModeBase.h"
 #include "Kismet/GameplayStatics.h"
 // Sets default values
-ADelegateListener::ADelegateListener()
+AMulticastDelegateListener::AMulticastDelegateListener()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
 	PointLight = CreateDefaultSubobject<UPointLightComponent>("PointLight");
 	RootComponent = PointLight;
-
-	PointLight->SetVisibility(false);
-	PointLight->SetLightColor(FLinearColor::Blue);
 }
 
 // Called when the game starts or when spawned
-void ADelegateListener::BeginPlay()
+void AMulticastDelegateListener::BeginPlay()
 {
 	Super::BeginPlay();
-	
 	UWorld* TheWorld = GetWorld();
 	if (TheWorld != nullptr) {
 		AGameModeBase* GameMode = UGameplayStatics::GetGameMode(TheWorld);
 
 		ALearningGameModeBase* MyGameMode = Cast<ALearningGameModeBase>(GameMode);
 		if (GameMode != nullptr) {
-			MyGameMode->MyStandardDelegate.BindUObject(this, &ADelegateListener::EnableLight);
-			MyGameMode->MyStandardDelegate2.BindUObject(this, &ADelegateListener::DisableLight);
+			MyDelegateHandle = MyGameMode->MyMulticastDelegate.AddUObject(this, &AMulticastDelegateListener::ToggleLight);
 		}
 	}
 }
 
-void ADelegateListener::EndPlay(const EEndPlayReason::Type EndPlayReason) {
+// Called every frame
+void AMulticastDelegateListener::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+}
+
+void AMulticastDelegateListener::ToggleLight() {
+	PointLight->ToggleVisibility();
+}
+
+void AMulticastDelegateListener::EndPlay(const EEndPlayReason::Type EndPlayReason) {
 	Super::EndPlay(EndPlayReason);
 	UWorld* TheWorld = GetWorld();
 	if (TheWorld != nullptr) {
@@ -42,23 +47,7 @@ void ADelegateListener::EndPlay(const EEndPlayReason::Type EndPlayReason) {
 
 		ALearningGameModeBase* MyGameMode = Cast<ALearningGameModeBase>(GameMode);
 		if (GameMode != nullptr) {
-			MyGameMode->MyStandardDelegate.Unbind();
-			MyGameMode->MyStandardDelegate2.Unbind();
+			MyGameMode->MyMulticastDelegate.Remove(MyDelegateHandle);
 		}
 	}
-}
-
-// Called every frame
-void ADelegateListener::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-}
-
-void ADelegateListener::EnableLight() {
-	PointLight->SetVisibility(true);
-}
-
-void ADelegateListener::DisableLight() {
-	PointLight->SetVisibility(false);
 }
