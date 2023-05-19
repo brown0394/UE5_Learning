@@ -4,26 +4,34 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Components/BoxComponent.h"
-#include "MyTriggerVloume.generated.h"
+#include "Clock.generated.h"
 
-DECLARE_EVENT(AMyTriggerVloume, FPlayerEntered)
 UCLASS()
-class LEARNING_API AMyTriggerVloume : public AActor
+class LEARNING_API AClock : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	AMyTriggerVloume();
-	UPROPERTY()
-		UBoxComponent* TriggerZone;
-	UFUNCTION()
-		virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
-	UFUNCTION()
-		virtual void NotifyActorEndOverlap(AActor* OtherActor) override;
+	AClock();
 
-	FPlayerEntered OnPlayerEntered;
+	UPROPERTY()
+		USceneComponent* RootSceneComponent;
+	UPROPERTY()
+		UStaticMeshComponent* ClockFace;
+	UPROPERTY()
+		USceneComponent* HourHandle;
+	UPROPERTY()
+		UStaticMeshComponent* HourHand;
+	UPROPERTY()
+		USceneComponent* MinuteHandle;
+	UPROPERTY()
+		UStaticMeshComponent* MinuteHand;
+	UFUNCTION()
+		void TimeChanged(int32 Hours, int32 Minutes);
+
+	FDelegateHandle MyDelegateHandle;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

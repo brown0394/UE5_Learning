@@ -4,26 +4,27 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Components/BoxComponent.h"
-#include "MyTriggerVloume.generated.h"
+#include "GameFramework/RotatingMovementComponent.h"
+#include "Pickup.generated.h"
 
-DECLARE_EVENT(AMyTriggerVloume, FPlayerEntered)
+DECLARE_DELEGATE(FPickedupEventSignature)
 UCLASS()
-class LEARNING_API AMyTriggerVloume : public AActor
+class LEARNING_API APickup : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	AMyTriggerVloume();
-	UPROPERTY()
-		UBoxComponent* TriggerZone;
-	UFUNCTION()
-		virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
-	UFUNCTION()
-		virtual void NotifyActorEndOverlap(AActor* OtherActor) override;
+	APickup();
 
-	FPlayerEntered OnPlayerEntered;
+	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
+
+	UPROPERTY()
+		UStaticMeshComponent* MyMesh;
+	UPROPERTY()
+		URotatingMovementComponent* RotatingComponent;
+
+	FPickedupEventSignature OnPickedUp;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

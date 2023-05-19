@@ -4,26 +4,28 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Components/BoxComponent.h"
-#include "MyTriggerVloume.generated.h"
+#include "Pickup.h"
+#include "PickupSpawner.generated.h"
 
-DECLARE_EVENT(AMyTriggerVloume, FPlayerEntered)
 UCLASS()
-class LEARNING_API AMyTriggerVloume : public AActor
+class LEARNING_API APickupSpawner : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	AMyTriggerVloume();
-	UPROPERTY()
-		UBoxComponent* TriggerZone;
-	UFUNCTION()
-		virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
-	UFUNCTION()
-		virtual void NotifyActorEndOverlap(AActor* OtherActor) override;
+	APickupSpawner();
 
-	FPlayerEntered OnPlayerEntered;
+	UPROPERTY()
+		USceneComponent* SpawnLocation;
+	UFUNCTION()
+		void PickUpCollected();
+	UFUNCTION()
+		void SpawnPickup();
+	UPROPERTY()
+		APickup* CurrentPickup;
+	FTimerHandle MyTimer;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

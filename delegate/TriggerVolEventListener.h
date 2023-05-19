@@ -4,26 +4,24 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Components/BoxComponent.h"
-#include "MyTriggerVloume.generated.h"
+#include "Components/PointLightComponent.h"
+#include "MyTriggerVloume.h"
+#include "TriggerVolEventListener.generated.h"
 
-DECLARE_EVENT(AMyTriggerVloume, FPlayerEntered)
 UCLASS()
-class LEARNING_API AMyTriggerVloume : public AActor
+class LEARNING_API ATriggerVolEventListener : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	AMyTriggerVloume();
+	ATriggerVolEventListener();
 	UPROPERTY()
-		UBoxComponent* TriggerZone;
+		UPointLightComponent* PointLight;
+	UPROPERTY(EditAnywhere)
+		AMyTriggerVloume* TriggerEventSource;
 	UFUNCTION()
-		virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
-	UFUNCTION()
-		virtual void NotifyActorEndOverlap(AActor* OtherActor) override;
-
-	FPlayerEntered OnPlayerEntered;
+		void OnTriggerEvent();
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

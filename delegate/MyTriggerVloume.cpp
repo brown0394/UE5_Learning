@@ -40,6 +40,7 @@ void AMyTriggerVloume::NotifyActorBeginOverlap(AActor* OtherActor) {
 			auto Color = FLinearColor(1, 0, 0, 1);
 			MyGameMode->MyParameterDelegate.ExecuteIfBound(Color);
 			MyGameMode->MyMulticastDelegate.Broadcast();
+			OnPlayerEntered.Broadcast();
 		}
 	}
 }
