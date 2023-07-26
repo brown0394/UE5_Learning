@@ -16,4 +16,15 @@ void ALearningGameModeBase::BeginPlay() {
 	logger.Warning(FTEXT("A warning Message from gamemode"));
 	logger.Info(FTEXT("A info Message from gamemode"));
 	logger.Error(FTEXT("A error Message from gamemode"));
+
+	TSharedRef<IHttpRequest> http = FHttpModule::Get().CreateRequest();
+	FHttpRequestCompleteDelegate& delegate = http->OnProcessRequestComplete();
+	delegate.BindLambda([](FHttpRequestPtr request, FHttpResponsePtr response, bool success)->void {
+		UE_LOG(LogTemp, Warning, TEXT("Http Response: %d, %s"),
+		request->GetResponse()->GetResponseCode(),
+		*request->GetResponse()->GetContentAsString());
+		});
+
+	http->SetURL(TEXT("http://unrealengine.com"));
+	http->ProcessRequest();
 }

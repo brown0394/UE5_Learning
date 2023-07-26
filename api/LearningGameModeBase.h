@@ -4,6 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
+#include "HttpManager.h"
+#include "HttpModule.h"
+#include "HttpRetrySystem.h"
+#include "Interfaces/IHttpResponse.h"
 #include "LearningGameModeBase.generated.h"
 
 /**
